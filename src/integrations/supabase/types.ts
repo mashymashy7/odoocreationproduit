@@ -14,6 +14,125 @@ export type Database = {
   }
   public: {
     Tables: {
+      drive_connections: {
+        Row: {
+          access_token: string
+          auto_sync: boolean
+          created_at: string
+          email: string
+          error_message: string | null
+          folder_id: string | null
+          folder_name: string | null
+          id: string
+          last_sync_at: string | null
+          lock_until: string | null
+          paused: boolean
+          refresh_token: string
+          status: string
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string
+          auto_sync?: boolean
+          created_at?: string
+          email?: string
+          error_message?: string | null
+          folder_id?: string | null
+          folder_name?: string | null
+          id?: string
+          last_sync_at?: string | null
+          lock_until?: string | null
+          paused?: boolean
+          refresh_token?: string
+          status?: string
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string
+          auto_sync?: boolean
+          created_at?: string
+          email?: string
+          error_message?: string | null
+          folder_id?: string | null
+          folder_name?: string | null
+          id?: string
+          last_sync_at?: string | null
+          lock_until?: string | null
+          paused?: boolean
+          refresh_token?: string
+          status?: string
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      drive_oauth_states: {
+        Row: {
+          created_at: string
+          state: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          state: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          state?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      drive_synced_folders: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          folder_id: string
+          folder_name: string
+          id: string
+          product_id: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          folder_id: string
+          folder_name?: string
+          id?: string
+          product_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          folder_id?: string
+          folder_name?: string
+          id?: string
+          product_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drive_synced_folders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       odoo_connections: {
         Row: {
           api_key: string
