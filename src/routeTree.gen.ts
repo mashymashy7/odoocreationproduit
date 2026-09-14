@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ApiPublicGoogleDriveCallbackRouteImport } from './routes/api/public/google/drive-callback'
+import { Route as ApiPublicHooksDriveSyncRouteImport } from './routes/api/public/hooks/drive-sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +24,63 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicGoogleDriveCallbackRoute =
+  ApiPublicGoogleDriveCallbackRouteImport.update({
+    id: '/api/public/google/drive-callback',
+    path: '/api/public/google/drive-callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksDriveSyncRoute = ApiPublicHooksDriveSyncRouteImport.update({
+  id: '/api/public/hooks/drive-sync',
+  path: '/api/public/hooks/drive-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/api/public/google/drive-callback': typeof ApiPublicGoogleDriveCallbackRoute
+  '/api/public/hooks/drive-sync': typeof ApiPublicHooksDriveSyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/api/public/google/drive-callback': typeof ApiPublicGoogleDriveCallbackRoute
+  '/api/public/hooks/drive-sync': typeof ApiPublicHooksDriveSyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/api/public/google/drive-callback': typeof ApiPublicGoogleDriveCallbackRoute
+  '/api/public/hooks/drive-sync': typeof ApiPublicHooksDriveSyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/api/public/google/drive-callback'
+    | '/api/public/hooks/drive-sync'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth'
-  id: '__root__' | '/' | '/auth'
+  to:
+    | '/'
+    | '/auth'
+    | '/api/public/google/drive-callback'
+    | '/api/public/hooks/drive-sync'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/api/public/google/drive-callback'
+    | '/api/public/hooks/drive-sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  ApiPublicGoogleDriveCallbackRoute: typeof ApiPublicGoogleDriveCallbackRoute
+  ApiPublicHooksDriveSyncRoute: typeof ApiPublicHooksDriveSyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +99,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/google/drive-callback': {
+      id: '/api/public/google/drive-callback'
+      path: '/api/public/google/drive-callback'
+      fullPath: '/api/public/google/drive-callback'
+      preLoaderRoute: typeof ApiPublicGoogleDriveCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/drive-sync': {
+      id: '/api/public/hooks/drive-sync'
+      path: '/api/public/hooks/drive-sync'
+      fullPath: '/api/public/hooks/drive-sync'
+      preLoaderRoute: typeof ApiPublicHooksDriveSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  ApiPublicGoogleDriveCallbackRoute: ApiPublicGoogleDriveCallbackRoute,
+  ApiPublicHooksDriveSyncRoute: ApiPublicHooksDriveSyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
