@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { analyzeProductPhotos } from "@/lib/ai.functions";
 import { publishProductToOdoo } from "@/lib/odoo.functions";
 import { OdooConnectionDialog, type OdooConnection } from "@/components/OdooConnectionDialog";
+import { DrivePanel } from "@/components/DrivePanel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
