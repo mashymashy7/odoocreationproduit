@@ -372,6 +372,8 @@ function Workspace() {
             </Button>
           </section>
 
+          <DrivePanel onProductsChanged={loadHistory} />
+
           <section className="rounded-xl border border-border bg-card">
             <div className="flex items-center justify-between px-4 pt-4">
               <h2 className="text-sm font-semibold">Produits créés</h2>
