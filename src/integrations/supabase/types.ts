@@ -17,6 +17,7 @@ export type Database = {
       drive_connections: {
         Row: {
           access_token: string
+          auto_publish: boolean
           auto_sync: boolean
           created_at: string
           email: string
@@ -26,15 +27,18 @@ export type Database = {
           id: string
           last_sync_at: string | null
           lock_until: string | null
+          max_products_per_run: number
           paused: boolean
           refresh_token: string
           status: string
+          sync_interval_minutes: number
           token_expires_at: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           access_token?: string
+          auto_publish?: boolean
           auto_sync?: boolean
           created_at?: string
           email?: string
@@ -44,15 +48,18 @@ export type Database = {
           id?: string
           last_sync_at?: string | null
           lock_until?: string | null
+          max_products_per_run?: number
           paused?: boolean
           refresh_token?: string
           status?: string
+          sync_interval_minutes?: number
           token_expires_at?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           access_token?: string
+          auto_publish?: boolean
           auto_sync?: boolean
           created_at?: string
           email?: string
@@ -62,9 +69,11 @@ export type Database = {
           id?: string
           last_sync_at?: string | null
           lock_until?: string | null
+          max_products_per_run?: number
           paused?: boolean
           refresh_token?: string
           status?: string
+          sync_interval_minutes?: number
           token_expires_at?: string | null
           updated_at?: string
           user_id?: string
