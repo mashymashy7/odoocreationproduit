@@ -22,6 +22,10 @@ export type DriveConnectionRow = {
   auto_sync: boolean;
   paused: boolean;
   lock_until: string | null;
+  sync_interval_minutes?: number | null;
+  max_products_per_run?: number | null;
+  auto_publish?: boolean | null;
+  last_sync_at?: string | null;
 };
 
 /** Renvoie un jeton d'accès valide, en le rafraîchissant si besoin. */

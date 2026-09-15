@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { odooLogin, odooCall, fetchAsBase64 } from "./odoo.server";
+import { odooLogin, odooCall } from "./odoo.server";
 
 type ConnInput = { url: string; db_name: string; username: string; api_key: string };
 
