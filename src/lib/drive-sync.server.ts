@@ -84,8 +84,12 @@ async function pause(admin: Db, conn: DriveConnectionRow, message: string) {
 export async function syncConnection(
   admin: Db,
   conn: DriveConnectionRow,
-  maxFolders = 3,
+  maxFoldersOverride?: number,
 ): Promise<{ created: number; failed: number; message?: string }> {
+  const maxFolders = Math.min(
+    10,
+    Math.max(1, maxFoldersOverride ?? conn.max_products_per_run ?? 3),
+  );
   if (!conn.folder_id) return { created: 0, failed: 0, message: "Aucun dossier surveillé." };
   if (!(await acquireLock(admin, conn))) {
     return { created: 0, failed: 0, message: "Une synchronisation est déjà en cours." };
