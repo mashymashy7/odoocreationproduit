@@ -11,6 +11,9 @@ export type DriveStatus = {
   paused: boolean;
   error_message: string | null;
   last_sync_at: string | null;
+  sync_interval_minutes: number;
+  max_products_per_run: number;
+  auto_publish: boolean;
 };
 
 /** État de la liaison Google Drive de l'utilisateur. */
@@ -19,10 +22,39 @@ export const getDriveStatus = createServerFn({ method: "GET" })
   .handler(async ({ context }): Promise<DriveStatus | null> => {
     const { data } = await context.supabase
       .from("drive_connections")
-      .select("email, folder_id, folder_name, auto_sync, paused, error_message, last_sync_at")
+      .select(
+        "email, folder_id, folder_name, auto_sync, paused, error_message, last_sync_at, sync_interval_minutes, max_products_per_run, auto_publish",
+      )
       .maybeSingle();
     if (!data) return null;
     return { connected: true, ...data };
+  });
+
+/** Réglages personnalisés de la surveillance automatique. */
+export const setDriveCronSettings = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (input: { intervalMinutes: number; maxProducts: number; autoPublish: boolean }) => {
+      const interval = Math.round(Number(input?.intervalMinutes));
+      const maxProducts = Math.round(Number(input?.maxProducts));
+      if (!Number.isFinite(interval) || interval < 5 || interval > 1440)
+        throw new Error("La fréquence doit être comprise entre 5 minutes et 24 heures.");
+      if (!Number.isFinite(maxProducts) || maxProducts < 1 || maxProducts > 10)
+        throw new Error("Le nombre de produits par passage doit être compris entre 1 et 10.");
+      return { interval, maxProducts, autoPublish: !!input?.autoPublish };
+    },
+  )
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("drive_connections")
+      .update({
+        sync_interval_minutes: data.interval,
+        max_products_per_run: data.maxProducts,
+        auto_publish: data.autoPublish,
+      })
+      .eq("user_id", context.userId);
+    if (error) throw new Error("Impossible d'enregistrer les réglages.");
+    return { ok: true as const };
   });
 
 /** Prépare l'URL de consentement Google. */
