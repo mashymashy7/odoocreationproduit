@@ -22,6 +22,10 @@ export type DriveConnectionRow = {
   auto_sync: boolean;
   paused: boolean;
   lock_until: string | null;
+  sync_interval_minutes?: number | null;
+  max_products_per_run?: number | null;
+  auto_publish?: boolean | null;
+  last_sync_at?: string | null;
 };
 
 /** Renvoie un jeton d'accès valide, en le rafraîchissant si besoin. */
@@ -80,8 +84,12 @@ async function pause(admin: Db, conn: DriveConnectionRow, message: string) {
 export async function syncConnection(
   admin: Db,
   conn: DriveConnectionRow,
-  maxFolders = 3,
+  maxFoldersOverride?: number,
 ): Promise<{ created: number; failed: number; message?: string }> {
+  const maxFolders = Math.min(
+    10,
+    Math.max(1, maxFoldersOverride ?? conn.max_products_per_run ?? 3),
+  );
   if (!conn.folder_id) return { created: 0, failed: 0, message: "Aucun dossier surveillé." };
   if (!(await acquireLock(admin, conn))) {
     return { created: 0, failed: 0, message: "Une synchronisation est déjà en cours." };
@@ -163,7 +171,7 @@ export async function syncConnection(
           .update({ product_id: product.id, status: "created" })
           .eq("id", claim.id);
 
-        if (odooConn) {
+        if (odooConn && conn.auto_publish !== false) {
           await publishProduct(admin, product, odooConn);
           await admin
             .from("drive_synced_folders")
