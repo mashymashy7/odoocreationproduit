@@ -44,7 +44,7 @@ export const Route = createFileRoute("/api/public/hooks/drive-sync")({
         }
 
         return new Response(
-          JSON.stringify({ ok: true, accounts: connections?.length ?? 0, created, failed }),
+          JSON.stringify({ ok: true, accounts: processed, created, failed }),
           { headers: { "content-type": "application/json" } },
         );
       },
