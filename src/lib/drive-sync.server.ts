@@ -171,7 +171,7 @@ export async function syncConnection(
           .update({ product_id: product.id, status: "created" })
           .eq("id", claim.id);
 
-        if (odooConn) {
+        if (odooConn && conn.auto_publish !== false) {
           await publishProduct(admin, product, odooConn);
           await admin
             .from("drive_synced_folders")

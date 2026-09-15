@@ -30,8 +30,15 @@ export const Route = createFileRoute("/api/public/hooks/drive-sync")({
 
         let created = 0;
         let failed = 0;
+        let processed = 0;
         for (const conn of connections ?? []) {
-          const result = await syncConnection(supabaseAdmin, conn, 3);
+          // Respecte la fréquence choisie par l'utilisateur.
+          const interval = (conn.sync_interval_minutes ?? 15) * 60_000;
+          const last = conn.last_sync_at ? Date.parse(conn.last_sync_at) : 0;
+          if (last && Date.now() - last < interval) continue;
+
+          processed += 1;
+          const result = await syncConnection(supabaseAdmin, conn);
           created += result.created;
           failed += result.failed;
         }
